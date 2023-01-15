@@ -7,17 +7,14 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 URL = 'https://www.avito.ru/novotroitsk/tovary_dlya_kompyutera/komplektuyuschie/videokarty-ASgBAgICAkTGB~pm7gmmZw'
 PAUSE_DURATION_SECONDS = 5
-CLEANR = re.compile('<.*?>')
-
 
 def main():
-    driver.get(URL)
-    sleep(PAUSE_DURATION_SECONDS)
-    with open("page.html", "w", encoding="utf-8") as file:
-        file.write(driver.page_source)
-    driver.quit()
+    web_scrap()
     get_items("page.html")
 
+def web_scrap():
+    driver.get(URL)
+    sleep(PAUSE_DURATION_SECONDS)
 
 def get_items(file):
     with open(file, "r", encoding="utf-8") as file:
@@ -44,4 +41,5 @@ if __name__ == '__main__':
     except Exception as e:
         print(e)
     finally:
-        pass
+        driver.close()
+        driver.quit()

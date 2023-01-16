@@ -75,12 +75,14 @@ def write_list_in_file(list, filename):
 
 # Выборка различающихся строк из двух файлов
 def diff_search(file1, file2):
-    f1 = open(file1, "r", encoding="utf-8")
-    f2 = open(file2, "r", encoding="utf-8")
-    list1 = f1.readlines()
-    list2 = f2.readlines()
-    diff_lines = list(set(list1) - set(list2))
-    write_list_in_file(diff_lines, f"diff_of_{file1}&{file2}")
+    if os.path.exists(file1):
+        if os.path.exists(file2):
+            f1 = open(file1, "r", encoding="utf-8")
+            f2 = open(file2, "r", encoding="utf-8")
+            list1 = f1.readlines()
+            list2 = f2.readlines()
+            diff_lines = list(set(list1) - set(list2))
+            write_list_in_file(diff_lines, f"diff_of_{file1}&{file2}")
 
 #Точка входа
 if __name__ == '__main__':

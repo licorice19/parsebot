@@ -1,6 +1,5 @@
 from time import sleep
-import re
-import os
+import re, os
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -13,17 +12,23 @@ CATEGORIES = []
 
 
 def main():
-    html_get()
-    get_items("page.html")
-    filter_by_city()
-    diff_search(f"{CITIES[0]}.txt", f"old_{CITIES[0]}.txt")
+    parser()
 
-# получение html страницы
-def html_get():
+#Основная функция парсинга
+def parser():
+    service = Service(executable_path=ChromeDriverManager().install())
+    driver = webdriver.Chrome(service=service)
     driver.get(URL)
     sleep(PAUSE_DURATION_SECONDS)
     with open("page.html", "w", encoding="utf-8") as file:
         file.write(driver.page_source)
+
+    get_items("page.html")
+    filter_by_city()
+    diff_search(f"{CITIES[0]}.txt", f"old_{CITIES[0]}.txt")
+
+    driver.close()
+    driver.quit()
 
 # получение списка товаров
 def get_items(file):
@@ -84,14 +89,13 @@ def diff_search(file1, file2):
             diff_lines = list(set(list1) - set(list2))
             write_list_in_file(diff_lines, f"diff_of_{file1}&{file2}")
 
+
+
 #Точка входа
 if __name__ == '__main__':
     try:
-        service = Service(executable_path=ChromeDriverManager().install())
-        driver = webdriver.Chrome(service=service)
         main()
     except Exception as e:
         print(e)
     finally:
-        driver.close()
-        driver.quit()
+        pass

@@ -2,3 +2,6 @@
 *.html
 !requirements.txt
 /.venv
+jupyter
+.env
+__pycache__/

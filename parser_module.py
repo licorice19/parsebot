@@ -1,6 +1,6 @@
+import json
 import os
 from bs4 import BeautifulSoup
-import json
 from collections import OrderedDict
 
 def get_items(file, path): 
@@ -23,14 +23,15 @@ def get_items(file, path):
         item_url = item.find('a').get("href")
         item_price = item.find("span", attrs={"data-marker": "item-price"}).find('meta', attrs={"itemprop": "price"}).get('content')
         item_title = item.find("h3", attrs={"itemprop": "name"}).contents[0]
-        goods[index] = {'title':item_title, 'price':item_price, 'url': f"https://avito.ru{item_url}"}
+        goods[index] = {'title':item_title, 'price':item_price, 'url': f"https://www.avito.ru{item_url}"}
     with open(urls_file, "w", encoding="utf-8") as file:
         goods = OrderedDict(sorted(goods.items()))
         json.dump(goods, file)
 
+
 # фильтрация текстового файла по городу
 def filter_by_city(city, file_path, output_path):
-    city_code = CITIES[city]
+    city_code = city
     filtered_items = {}
 
     # Rename the previous filtered file to a backup
@@ -79,6 +80,7 @@ def json_compare(json1, json2):
         f1.close()
         f2.close()
 
+
 # Выборка различающихся строк из двух файлов
 def diff_search(file1, file2, path):
     diff_file = f"{path}diff.json"
@@ -91,12 +93,10 @@ def diff_search(file1, file2, path):
                 if diff:
                     with open(diff_file, "w", encoding="utf-8") as file:
                         json.dump(diff, file)
+                    return diff
     except FileNotFoundError as e:
         print(f"{e} : Invalid file path")
     except json.decoder.JSONDecodeError as e:
         print(f"{e} : Invalid json format")
     except Exception as e:
         print(e)
-    finally:
-        f1.close()
-        f2.close()

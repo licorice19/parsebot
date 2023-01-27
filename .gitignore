@@ -6,3 +6,5 @@ jupyter
 .env
 __pycache__/
 users/
+.vscode/
+build/

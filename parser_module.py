@@ -3,7 +3,7 @@ import os
 from bs4 import BeautifulSoup
 from collections import OrderedDict
 
-def get_items(file, path): 
+async def get_items(file, path): 
     urls_file = f"{path}urls.json"
     urls_old_file = f"{path}urls_old.json"
 
@@ -30,7 +30,7 @@ def get_items(file, path):
 
 
 # фильтрация текстового файла по городу
-def filter_by_city(city, file_path, output_path):
+async def filter_by_city(city, file_path, output_path):
     city_code = city
     filtered_items = {}
 
@@ -59,7 +59,7 @@ def filter_by_city(city, file_path, output_path):
     with open(filtered_file, "w", encoding="utf-8") as file:
         json.dump(filtered_items, file)
 
-def json_compare(json1, json2):
+async def json_compare(json1, json2):
     try:
         f1 = open(json1, "r", encoding="utf-8")
         f2 = open(json2, "r", encoding="utf-8")
@@ -82,7 +82,7 @@ def json_compare(json1, json2):
 
 
 # Выборка различающихся строк из двух файлов
-def diff_search(file1, file2, path):
+async def diff_search(file1, file2, path):
     diff_file = f"{path}diff.json"
     try:
         if os.path.exists(file1) and os.path.exists(file2):
